@@ -1,0 +1,43 @@
+name: 零成本AI智能扫描处理 # 机器人换了免费的大脑
+
+# 触发条件：保持不变
+on:
+  push:
+    paths:
+      - 'images/**' # 只有 images 文件夹下的变化才会触发
+
+jobs:
+  analyze_voxel_scene: 
+    runs-on: ubuntu-latest # 配一台普通的电脑
+
+    permissions:
+      contents: write # 机器人需要写权限，把 scenes.json 推回仓库
+
+    steps: # 机器人干活的具体步骤，变得极其干净
+      - name: 第一步：拉取仓库代码
+        uses: actions/checkout@v4
+
+      - name: 第二步：配置 Python 环境
+        uses: actions/setup-python@v4
+        with:
+          python-python-version: '3.9' # 配一个适合跑本地 AI 脚本的 Python
+
+      - name: 第三步：安装开源 AI 工具箱 (Ultralytics)
+        run: |
+          pip install ultralytics # ✨ 核心魔法：只安装这一个完全免费的开源 AI 工具箱
+          # 注意：因为没有了 Google 密钥，我们不需要再 eco 通行证文件了！
+          # 这个安装包里就自带了 YOLO 大脑所需的神经网络框架
+
+      - name: 第四步：加载免费大脑，运行扫描脚本
+        # 这里没有了 GOOGLE_APPLICATION_CREDENTIALS 的环境变量！彻底告别收费密钥！
+        run: |
+          python scripts/analyze_vision.py # 运行脚本，开始扫描图片并自动更新 JSON
+
+      - name: 第五步：把自动更新后的数据自动推送回仓库 (保持原样)
+        # 机器人 push 后，GitHub Pages 机器人会立刻自动发布新版本的网站。
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "AIGC Voxel Robot (Free Brain)"
+          git add scenes.json 
+          git commit -m "🤖 自动AIGC处理: scene.json 已自动更新 [开源 YOLOv8 模型, $0 成本]" || echo "No changes to commit"
+          git push
