@@ -1,23 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>我的第一个英语 AR 魔法网页yes</title>
-    <!-- 引入强大的 3D 和 AR 库（也就是借用别人的现成工具） -->
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>体素农场有声绘本</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f9ff;
+            font-family: 'PingFang SC', sans-serif;
+        }
+
+        .book-container {
+            position: relative;
+            margin-top: 20px;
+            width: 90vw;
+            max-width: 800px;
+            border: 8px solid #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* 绘本的主背景图 */
+        .page-image {
+            width: 100%;
+            display: block;
+        }
+
+        /* 热点区域：点击这里触发声音 */
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            /* 开发时可以给点颜色看位置，发布时改为 transparent */
+            background-color: rgba(255, 255, 255, 0.2); 
+            border: 2px dashed rgba(255,255,255,0.5);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .hotspot:active {
+            transform: scale(1.1);
+        }
+
+        .word-label {
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            pointer-events: none;
+            opacity: 0; /* 平时隐藏，点击后显示 */
+            transition: opacity 0.5s;
+        }
+
+        .instruction {
+            margin: 20px;
+            color: #0369a1;
+            font-weight: bold;
+        }
+    </style>
 </head>
-<body style="margin: 0px; overflow: hidden;">
-    <!-- 构建一个 AR 场景 -->
-    <a-scene embedded arjs>
-        <!-- 定义一个识别图（名字叫 hiro） -->
-        <a-marker preset="hiro">
-            <!-- 当手机看到识别图时，在图片上方悬浮一个红色的 3D 方块 -->
-            <!-- 以后你可以把这个方块换成你设计的 3D 角色！ -->
-            <a-box position="0 0.5 0" material="color: red; opacity: 0.8;" animation="property: rotation; to: 0 360 0; loop: true; dur: 3000"></a-box>
-        </a-marker>
-        <!-- 开启手机摄像头 -->
-        <a-entity camera></a-entity>
-    </a-scene>
+<body>
+
+    <div class="instruction">🌟 点击画面里的物体，听听它们叫什么！</div>
+
+    <div class="book-container">
+        <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=1000" class="page-image" alt="Farm Scene">
+
+        <div class="hotspot" style="top: 20%; left: 10%; width: 25%; height: 30%;" onclick="speak('Strawberry')">
+            <span class="word-label">Strawberry</span>
+        </div>
+
+        <div class="hotspot" style="top: 40%; left: 40%; width: 30%; height: 40%;" onclick="speak('House')">
+            <span class="word-label">House</span>
+        </div>
+
+        <div class="hotspot" style="top: 10%; left: 70%; width: 20%; height: 50%;" onclick="speak('Tree')">
+            <span class="word-label">Tree</span>
+        </div>
+    </div>
+
+    <script>
+        // 核心魔法：让浏览器开口说话
+        function speak(text) {
+            // 1. 创建一个说话的任务
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // 2. 设置语言为美式英语
+            utterance.lang = 'en-US';
+            
+            // 3. 设置语速（0.8 比较适合小朋友听清楚）
+            utterance.rate = 0.8;
+            
+            // 4. 设置音调
+            utterance.pitch = 1.2;
+
+            // 5. 执行说话
+            window.speechSynthesis.speak(utterance);
+
+            // 视觉反馈：点击后让对应的标签闪现一下
+            const labels = document.querySelectorAll('.word-label');
+            labels.forEach(l => {
+                if(l.innerText === text) {
+                    l.style.opacity = '1';
+                    setTimeout(() => l.style.opacity = '0', 2000);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
