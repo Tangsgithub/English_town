@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的魔法有声绘本进阶版</title>
+    <title>Steve Voxel English Academy</title>
     <style>
         body {
             margin: 0;
@@ -11,75 +11,108 @@
             flex-direction: column;
             align-items: center;
             background-color: #f8fafc;
-            /* 换了一种更活泼、偏儿童感的字体 */
             font-family: 'Comic Sans MS', 'PingFang SC', sans-serif; 
         }
 
-        .instruction {
-            margin: 20px;
-            color: #0f172a;
-            font-size: 20px;
+        /* 👑 新增：顶部导航菜单的样式 */
+        .nav-menu {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .scene-btn {
+            background: transparent;
+            border: 2px solid transparent;
+            padding: 10px 20px;
+            font-size: 18px;
             font-weight: bold;
-            text-align: center;
+            color: #64748b;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        /* 当按钮被选中时的样式 */
+        .scene-btn.active {
+            background: #e0f2fe;
+            color: #0284c7;
+            border: 2px solid #38bdf8;
+        }
+
+        .instruction {
+            margin: 15px;
+            color: #0f172a;
+            font-size: 18px;
+            font-weight: bold;
         }
 
         .book-container {
             position: relative;
             width: 95vw;
-            max-width: 900px; 
+            max-width: 1200px; 
             border: 10px solid #fff;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             overflow: hidden;
         }
 
+        /* 👑 新增：场景大盒子，默认全部隐藏，只有带 active 的才显示 */
+        .scene {
+            display: none; 
+            position: relative;
+            width: 100%;
+        }
+
+        .scene.active {
+            display: block; 
+        }
+
         .page-image {
             width: 100%;
             display: block;
-            /* 防止小孩子乱点时长按保存图片 */
             user-select: none;
             -webkit-user-drag: none;
         }
 
-        /* 👑 核心升级 1：热点区域完全隐身！ */
         .hotspot {
             position: absolute;
             cursor: pointer;
-            /* 设置为透明，彻底隐藏框框 */
-            background-color: transparent; 
+            background-color: transparent; /* 调试时可以改成 rgba(255,0,0,0.3) */
             border: none; 
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* 👑 核心升级 2：极具设计感的单词标签 */
         .word-label {
-            background: rgba(255, 255, 255, 0.95); /* 半透明高级白底 */
+            white-space: nowrap; 
+            background: rgba(255, 255, 255, 0.95); 
             color: #333;
             padding: 10px 18px;
             border-radius: 12px;
             font-size: 22px;
             font-weight: bold;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* 悬浮阴影 */
-            pointer-events: none; /* 防止标签挡住点击动作 */
-            opacity: 0; /* 默认完全透明（看不见） */
-            transform: translateY(15px); /* 默认往下沉一点点 */
-            /* 加入弹簧一样的弹出动画，非常有高级感 */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2); 
+            pointer-events: none; 
+            opacity: 0; 
+            transform: translateY(15px); 
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             text-align: center;
         }
 
-        /* 当点击后，用 JS 加上这个 .show 状态，标签就会浮现出来 */
         .word-label.show {
             opacity: 1;
-            transform: translateY(-10px); /* 向上浮动并定住 */
+            transform: translateY(-10px); 
         }
 
-        /* 👑 音标的专属排版 */
         .phonetic {
             display: block;
-            color: #e11d48; /* 用好看的玫瑰红区分音标 */
+            color: #e11d48; 
             font-size: 16px;
             margin-top: 4px;
             font-weight: normal;
@@ -88,56 +121,79 @@
 </head>
 <body>
 
+    <!-- 🌟 导航菜单 -->
+    <div class="nav-menu">
+        <button class="scene-btn active" onclick="switchScene('scene1', this)">🚜 魔法农场</button>
+        <button class="scene-btn" onclick="switchScene('scene2', this)">🏫 体素教室</button>
+    </div>
+
     <div class="instruction">🪄 找一找画面里的动植物，点一下试试看！</div>
 
+    <!-- 🌟 装所有场景的大画框 -->
     <div class="book-container">
-        <!-- 💡 请把你刚下载的精美图片重命名为 magic-farm.jpg，然后上传到仓库里 -->
-        <img src="magic_farm.png" class="page-image" alt="Magic Farm">
+        
+        <!-- ================= 场景 1：魔法农场 ================= -->
+        <div id="scene1" class="scene active">
+            <!-- 这里放你刚搞定的农场图 -->
+            <img src="magic_farm.png" class="page-image" alt="Magic Farm">
 
-        <!-- 区域 1: 左侧苹果树 -->
-        <!-- 注意看：现在不仅传了发音单词，还把这个区域本身(this)传给了后面的机器 -->
-        <div class="hotspot" style="top: 15%; left: 5%; width: 30%; height: 50%;" onclick="speak('Apple Tree', this)">
-            <!-- 标签里同时包含了单词和音标 -->
-            <span class="word-label">Apple Tree<span class="phonetic">[ˈæpl triː]</span></span>
+            <!-- 农场的热点框 -->
+            <div class="hotspot" style="top: 15%; left: 5%; width: 15%; height: 30%;" onclick="speak('Apple Tree', this)">
+                <span class="word-label">Apple Tree<span class="phonetic">[ˈæpl triː]</span></span>
+            </div>
+            <div class="hotspot" style="top: 35%; left: 35%; width: 25%; height: 30%;" onclick="speak('House', this)">
+                <span class="word-label">House<span class="phonetic">[haʊs]</span></span>
+            </div>
         </div>
 
-        <!-- 区域 2: 中间的房子 -->
-        <div class="hotspot" style="top: 35%; left: 35%; width: 30%; height: 35%;" onclick="speak('House', this)">
-            <span class="word-label">House<span class="phonetic">[haʊs]</span></span>
+        <!-- ================= 场景 2：体素教室（等待你上传新图） ================= -->
+        <div id="scene2" class="scene">
+            <!-- 假设你之后会上传一张叫 voxel-classroom.jpg 的图片 -->
+            <img src="voxel-classroom.png" class="page-image" alt="Voxel Classroom" onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=1000'">
+
+            <!-- 教室的热点框 (你需要根据新图重新调百分比) -->
+            <div class="hotspot" style="top: 40%; left: 20%; width: 20%; height: 30%;" onclick="speak('Desk', this)">
+                <span class="word-label">Desk<span class="phonetic">[desk]</span></span>
+            </div>
+            <div class="hotspot" style="top: 20%; left: 60%; width: 25%; height: 40%;" onclick="speak('Blackboard', this)">
+                <span class="word-label">Blackboard<span class="phonetic">[ˈblækbɔːrd]</span></span>
+            </div>
         </div>
 
-        <!-- 区域 3: 右侧巨大向日葵 -->
-        <div class="hotspot" style="top: 10%; left: 68%; width: 25%; height: 50%;" onclick="speak('Sunflower', this)">
-            <span class="word-label">Sunflower<span class="phonetic">[ˈsʌnflaʊər]</span></span>
-        </div>
-
-        <!-- 区域 4: 前面的小狗 -->
-        <div class="hotspot" style="top: 70%; left: 35%; width: 15%; height: 20%;" onclick="speak('Dog', this)">
-            <span class="word-label">Dog<span class="phonetic">[dɔːɡ]</span></span>
-        </div>
     </div>
 
     <script>
+        // 核心功能 1：发声和动画
         function speak(text, element) {
-            // 第一步：让浏览器念单词
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'en-US'; // 纯正美音
-            utterance.rate = 0.85;    // 语速稍微放慢，适合孩子
-            utterance.pitch = 1.1;    // 声音调得清脆一点
+            utterance.lang = 'en-US'; 
+            utterance.rate = 0.85;    
+            utterance.pitch = 1.1;    
             window.speechSynthesis.speak(utterance);
 
-            // 第二步：炫酷的视觉动画
-            // 找到你刚刚点击的那个区域里的标签框
             const label = element.querySelector('.word-label');
-            
-            // 瞬间给它加上 'show' 的状态（它就会带动画弹出来）
             label.classList.add('show');
+            setTimeout(() => { label.classList.remove('show'); }, 2000);
+        }
 
-            // 设定一个 2 秒钟（2000毫秒）的定时器
-            setTimeout(() => {
-                // 2秒后，撤销 'show' 状态，标签就会慢慢消失
-                label.classList.remove('show');
-            }, 2000);
+        // 核心功能 2：切换场景的魔法逻辑
+        function switchScene(sceneId, clickedBtn) {
+            // 第一步：把所有的场景都藏起来
+            const allScenes = document.querySelectorAll('.scene');
+            allScenes.forEach(scene => {
+                scene.classList.remove('active');
+            });
+
+            // 第二步：把目标场景显示出来
+            const targetScene = document.getElementById(sceneId);
+            targetScene.classList.add('active');
+
+            // 第三步：更新顶部按钮的颜色（让选中的按钮变蓝）
+            const allBtns = document.querySelectorAll('.scene-btn');
+            allBtns.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            clickedBtn.classList.add('active');
         }
     </script>
 </body>
