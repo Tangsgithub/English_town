@@ -3,116 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>体素农场有声绘本</title>
+    <title>我的魔法有声绘本进阶版</title>
     <style>
         body {
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #f0f9ff;
-            font-family: 'PingFang SC', sans-serif;
-        }
-
-        .book-container {
-            position: relative;
-            margin-top: 20px;
-            width: 90vw;
-            max-width: 800px;
-            border: 8px solid #fff;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        /* 绘本的主背景图 */
-        .page-image {
-            width: 100%;
-            display: block;
-        }
-
-        /* 热点区域：点击这里触发声音 */
-        .hotspot {
-            position: absolute;
-            cursor: pointer;
-            /* 开发时可以给点颜色看位置，发布时改为 transparent */
-            background-color: rgba(255, 255, 255, 0.2); 
-            border: 2px dashed rgba(255,255,255,0.5);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-        }
-
-        .hotspot:active {
-            transform: scale(1.1);
-        }
-
-        .word-label {
-            background: rgba(0,0,0,0.6);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 14px;
-            pointer-events: none;
-            opacity: 0; /* 平时隐藏，点击后显示 */
-            transition: opacity 0.5s;
+            background-color: #f8fafc;
+            /* 换了一种更活泼、偏儿童感的字体 */
+            font-family: 'Comic Sans MS', 'PingFang SC', sans-serif; 
         }
 
         .instruction {
             margin: 20px;
-            color: #0369a1;
+            color: #0f172a;
+            font-size: 20px;
             font-weight: bold;
+            text-align: center;
+        }
+
+        .book-container {
+            position: relative;
+            width: 95vw;
+            max-width: 900px; 
+            border: 10px solid #fff;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .page-image {
+            width: 100%;
+            display: block;
+            /* 防止小孩子乱点时长按保存图片 */
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* 👑 核心升级 1：热点区域完全隐身！ */
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            /* 设置为透明，彻底隐藏框框 */
+            background-color: transparent; 
+            border: none; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 👑 核心升级 2：极具设计感的单词标签 */
+        .word-label {
+            background: rgba(255, 255, 255, 0.95); /* 半透明高级白底 */
+            color: #333;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* 悬浮阴影 */
+            pointer-events: none; /* 防止标签挡住点击动作 */
+            opacity: 0; /* 默认完全透明（看不见） */
+            transform: translateY(15px); /* 默认往下沉一点点 */
+            /* 加入弹簧一样的弹出动画，非常有高级感 */
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            text-align: center;
+        }
+
+        /* 当点击后，用 JS 加上这个 .show 状态，标签就会浮现出来 */
+        .word-label.show {
+            opacity: 1;
+            transform: translateY(-10px); /* 向上浮动并定住 */
+        }
+
+        /* 👑 音标的专属排版 */
+        .phonetic {
+            display: block;
+            color: #e11d48; /* 用好看的玫瑰红区分音标 */
+            font-size: 16px;
+            margin-top: 4px;
+            font-weight: normal;
         }
     </style>
 </head>
 <body>
 
-    <div class="instruction">🌟 点击画面里的物体，听听它们叫什么！</div>
+    <div class="instruction">🪄 找一找画面里的动植物，点一下试试看！</div>
 
     <div class="book-container">
-        <img src="magic_farm.png" class="page-image" alt="Farm Scene">
+        <!-- 💡 请把你刚下载的精美图片重命名为 magic-farm.jpg，然后上传到仓库里 -->
+        <img src="magic_farm.png" class="page-image" alt="Magic Farm">
 
-        <div class="hotspot" style="top: 20%; left: 10%; width: 25%; height: 30%;" onclick="speak('Strawberry')">
-            <span class="word-label">Strawberry</span>
+        <!-- 区域 1: 左侧苹果树 -->
+        <!-- 注意看：现在不仅传了发音单词，还把这个区域本身(this)传给了后面的机器 -->
+        <div class="hotspot" style="top: 15%; left: 5%; width: 30%; height: 50%;" onclick="speak('Apple Tree', this)">
+            <!-- 标签里同时包含了单词和音标 -->
+            <span class="word-label">Apple Tree<span class="phonetic">[ˈæpl triː]</span></span>
         </div>
 
-        <div class="hotspot" style="top: 40%; left: 40%; width: 30%; height: 40%;" onclick="speak('House')">
-            <span class="word-label">House</span>
+        <!-- 区域 2: 中间的房子 -->
+        <div class="hotspot" style="top: 35%; left: 35%; width: 30%; height: 35%;" onclick="speak('House', this)">
+            <span class="word-label">House<span class="phonetic">[haʊs]</span></span>
         </div>
 
-        <div class="hotspot" style="top: 10%; left: 70%; width: 20%; height: 50%;" onclick="speak('Tree')">
-            <span class="word-label">Tree</span>
+        <!-- 区域 3: 右侧巨大向日葵 -->
+        <div class="hotspot" style="top: 10%; left: 68%; width: 25%; height: 50%;" onclick="speak('Sunflower', this)">
+            <span class="word-label">Sunflower<span class="phonetic">[ˈsʌnflaʊər]</span></span>
+        </div>
+
+        <!-- 区域 4: 前面的小狗 -->
+        <div class="hotspot" style="top: 70%; left: 35%; width: 15%; height: 20%;" onclick="speak('Dog', this)">
+            <span class="word-label">Dog<span class="phonetic">[dɔːɡ]</span></span>
         </div>
     </div>
 
     <script>
-        // 核心魔法：让浏览器开口说话
-        function speak(text) {
-            // 1. 创建一个说话的任务
+        function speak(text, element) {
+            // 第一步：让浏览器念单词
             const utterance = new SpeechSynthesisUtterance(text);
-            
-            // 2. 设置语言为美式英语
-            utterance.lang = 'en-US';
-            
-            // 3. 设置语速（0.8 比较适合小朋友听清楚）
-            utterance.rate = 0.8;
-            
-            // 4. 设置音调
-            utterance.pitch = 1.2;
-
-            // 5. 执行说话
+            utterance.lang = 'en-US'; // 纯正美音
+            utterance.rate = 0.85;    // 语速稍微放慢，适合孩子
+            utterance.pitch = 1.1;    // 声音调得清脆一点
             window.speechSynthesis.speak(utterance);
 
-            // 视觉反馈：点击后让对应的标签闪现一下
-            const labels = document.querySelectorAll('.word-label');
-            labels.forEach(l => {
-                if(l.innerText === text) {
-                    l.style.opacity = '1';
-                    setTimeout(() => l.style.opacity = '0', 2000);
-                }
-            });
+            // 第二步：炫酷的视觉动画
+            // 找到你刚刚点击的那个区域里的标签框
+            const label = element.querySelector('.word-label');
+            
+            // 瞬间给它加上 'show' 的状态（它就会带动画弹出来）
+            label.classList.add('show');
+
+            // 设定一个 2 秒钟（2000毫秒）的定时器
+            setTimeout(() => {
+                // 2秒后，撤销 'show' 状态，标签就会慢慢消失
+                label.classList.remove('show');
+            }, 2000);
         }
     </script>
 </body>
