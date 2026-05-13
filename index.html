@@ -66,28 +66,28 @@
             /* Debug 模式下会通过 JS 动态显示边框 */
         }
         
-        /* 🌟 极致美观的玻璃拟态弹出标签 */
+/* 🌟 极致美观且绝不重叠的标签 */
         .word-label { 
-            position: absolute; white-space: nowrap; pointer-events: none;
-            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px);
+            position: absolute; pointer-events: none;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.6);
-            padding: 12px 24px; border-radius: 25px; 
+            padding: 12px 24px; border-radius: 20px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
             opacity: 0; transform: translateY(20px) scale(0.9); 
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); 
-            display: flex; flex-direction: column; align-items: center;
+            /* 🐛 修复重叠核心：强制垂直排列，锁定间距，防止内容被挤压 */
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+            min-width: max-content; 
         }
         .word-label.show { opacity: 1; transform: translateY(0px) scale(1); }
         
-        /* 排版：单词、图标和音标 */
         .word-title { 
-            display: flex; align-items: center; gap: 8px;
-            color: #0f172a; font-size: 26px; font-weight: 800; letter-spacing: 0.5px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            color: #0f172a; font-size: 24px; font-weight: 800; line-height: 1; /* 锁定行高 */
         }
-        .audio-icon { font-size: 22px; }
         .phonetic { 
-            color: #ef4444; font-size: 16px; margin-top: 4px; 
-            font-weight: 600; font-family: 'Courier New', Courier, monospace;
+            color: #ef4444; font-size: 16px; font-weight: 600; 
+            font-family: 'Courier New', Courier, monospace; line-height: 1; margin: 0;
         }
     </style>
 </head>
