@@ -1,5 +1,113 @@
 {
-  "activeScene": "",
+  "activeScene": "voxel-classroom",
   "debugMode": false,
-  "scenes": {}
+  "scenes": {
+    "voxel-classroom": {
+      "id": "voxel-classroom",
+      "title": "✨ AIGC智能扫描: voxel-classroom",
+      "imageUrl": "images/voxel-classroom.jpg",
+      "instruction": "AIGC智能扫描完成！画面共有 11 个物体，点点看！",
+      "hotspots": [
+        {
+          "id": "auto_bench_13_0",
+          "word": "bench",
+          "phonetic": "[音标待更新]",
+          "top": 71.1,
+          "left": 49.66,
+          "width": 15.76,
+          "height": 26.12
+        },
+        {
+          "id": "auto_bench_13_1",
+          "word": "bench",
+          "phonetic": "[音标待更新]",
+          "top": 58.08,
+          "left": 67.69,
+          "width": 15.71,
+          "height": 22.08
+        },
+        {
+          "id": "auto_chair_56_2",
+          "word": "chair",
+          "phonetic": "[tʃer]",
+          "top": 70.99,
+          "left": 49.52,
+          "width": 15.76,
+          "height": 26.29
+        },
+        {
+          "id": "auto_tv_62_3",
+          "word": "tv",
+          "phonetic": "[音标待更新]",
+          "top": 2.6,
+          "left": 25.24,
+          "width": 25.55,
+          "height": 51.27
+        },
+        {
+          "id": "auto_bottle_39_4",
+          "word": "bottle",
+          "phonetic": "[音标待更新]",
+          "top": 69.07,
+          "left": 81.72,
+          "width": 2.38,
+          "height": 11.07
+        },
+        {
+          "id": "auto_bottle_39_5",
+          "word": "bottle",
+          "phonetic": "[音标待更新]",
+          "top": 70.32,
+          "left": 81.46,
+          "width": 1.9,
+          "height": 9.27
+        },
+        {
+          "id": "auto_bench_13_6",
+          "word": "bench",
+          "phonetic": "[音标待更新]",
+          "top": 64.72,
+          "left": 42.95,
+          "width": 17.13,
+          "height": 24.88
+        },
+        {
+          "id": "auto_bottle_39_7",
+          "word": "bottle",
+          "phonetic": "[音标待更新]",
+          "top": 71.47,
+          "left": 79.6,
+          "width": 1.66,
+          "height": 6.51
+        },
+        {
+          "id": "auto_bench_13_8",
+          "word": "bench",
+          "phonetic": "[音标待更新]",
+          "top": 64.51,
+          "left": 43.12,
+          "width": 21.15,
+          "height": 31.58
+        },
+        {
+          "id": "auto_bench_13_9",
+          "word": "bench",
+          "phonetic": "[音标待更新]",
+          "top": 51.24,
+          "left": 61.53,
+          "width": 15.94,
+          "height": 25.47
+        },
+        {
+          "id": "auto_bottle_39_10",
+          "word": "bottle",
+          "phonetic": "[音标待更新]",
+          "top": 68.15,
+          "left": 83.17,
+          "width": 1.64,
+          "height": 10.71
+        }
+      ]
+    }
+  }
 }
