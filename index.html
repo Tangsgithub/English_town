@@ -6,133 +6,79 @@
     <title>史蒂夫体素英语学院 - 0成本AIGC自动教学平台</title>
     <style>
         body { margin: 0; display: flex; flex-direction: column; align-items: center; background-color: #f8fafc; font-family: 'Comic Sans MS', 'PingFang SC', sans-serif; padding-bottom: 50px;}
-        
-        /* 🌟 顶部导航菜单样式 (JS会根据 JSON 数据动态填充) */
         .nav-menu { margin-top: 20px; display: flex; gap: 15px; background: white; padding: 10px 20px; border-radius: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .scene-btn { background: transparent; border: 2px solid transparent; padding: 10px 20px; font-size: 18px; font-weight: bold; color: #64748b; border-radius: 20px; cursor: pointer; transition: all 0.3s; }
         .scene-btn.active { background: #e0f2fe; color: #0284c7; border: 2px solid #38bdf8; }
-        
         .instruction { margin: 15px; color: #0f172a; font-size: 20px; font-weight: bold; text-align: center;}
-        
-        /* 🌟 绘本容器：不限制最大宽度，视觉冲击力更大，适配 AIGC 自动对齐 */
         .book-container { position: relative; width: 98vw; max-width: 1400px; border: 12px solid #fff; border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); overflow: hidden; }
-        
         .page-image { width: 100%; display: block; user-select: none; -webkit-user-drag: none; }
-        
-        /* 👑 核心魔法：热点区域完全隐身，由弹出的标签提供视觉反馈 */
         .hotspot { position: absolute; cursor: pointer; background-color: transparent; border: none; display: flex; align-items: center; justify-content: center; z-index: 5;}
-        
-        /* 💡 智能红音标标签样式 */
         .word-label { white-space: nowrap; background: rgba(255, 255, 255, 0.96); color: #333; padding: 12px 20px; border-radius: 15px; font-size: 24px; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.2); pointer-events: none; opacity: 0; transform: translateY(15px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center; }
-        
         .word-label.show { opacity: 1; transform: translateY(-10px); }
-        
-        /* 🛑 音标的红色区分样式 */
         .phonetic { display: block; color: #e11d48; font-size: 16px; margin-top: 4px; font-weight: normal; font-family: sans-serif;}
     </style>
 </head>
 <body>
-
-    <!-- 🌟 导航菜单（现在是空的，JS 会动态填充它） -->
     <div id="nav-menu" class="nav-menu"></div>
-
     <div id="instruction" class="instruction">🪄 正在请求 AI 扫描的魔法数据...</div>
-
-    <!-- 🌟 唯一的动态绘本舞台 -->
     <div class="book-container">
         <img id="page-image" src="" class="page-image" alt="Voxel English Scene">
-        <!-- 💡 动态生成的点击热点框将在这里浮现，精准覆盖物体 -->
         <div id="hotspot-container"></div>
     </div>
-
     <script>
-        let appData = null; // 用于存储从 JSON 文件里抓到的所有 AIGC 数据
-
-        // 核心神经中枢：动态加载一个场景的数据，包括图片和热点
+        let appData = null;
         function loadScene(sceneId) {
             if (!appData || !appData.scenes[sceneId]) {
-                console.error("💡 AIGC数据未就绪或未检测到该场景。可能是机器人还没跑完绿勾✅。");
+                console.error("💡 AIGC数据未就绪。请确认在 images/ 下传了图且机器人跑完 ✅。");
                 return;
             }
-
             const sceneData = appData.scenes[sceneId];
-
-            // 1. 更新顶部导航按钮的选中颜色
             const allBtns = document.querySelectorAll('.scene-btn');
             allBtns.forEach(btn => btn.classList.remove('active'));
             const clickedBtn = document.querySelector(`[onclick*="loadScene('${sceneId}')"]`);
             if (clickedBtn) clickedBtn.classList.add('active');
-
-            // 2. 动态更新指令和图片
             document.getElementById('instruction').innerText = sceneData.instruction;
             document.getElementById('page-image').src = sceneData.imageUrl;
-
-            // 👑 终极魔法：动态创造点击热点 (不再死板写死坐标！)
             const hotspotContainer = document.getElementById('hotspot-container');
-            hotspotContainer.innerHTML = ''; // 清空上一个场景的热点框
-
+            hotspotContainer.innerHTML = '';
             sceneData.hotspots.forEach(hs => {
-                // 1. 动态生成一个隐形的小方块
                 const hsElement = document.createElement('div');
                 hsElement.className = 'hotspot';
-                
-                // 2. 自动把 Python 机器人扫描并计算出的 top, left, width, height 百分比套在它身上
-                // 这是全自动精准对齐的关键！
                 hsElement.style.cssText = `top: ${hs.top}%; left: ${hs.left}%; width: ${hs.width}%; height: ${hs.height}%;`;
-                
-                // 3. 动态生成标签内容 (含单词和 AI 机器人生成的红色音标)
                 hsElement.innerHTML = `<span class="word-label">${hs.word}<span class="phonetic">${hs.phonetic}</span></span>`;
-
-                // 4. 动态给这个隐形方块绑定浏览器发声逻辑
                 hsElement.onclick = () => speak(hs.word, hsElement);
-
-                // 5. 把它挂到图片舞台上
                 hotspotContainer.appendChild(hsElement);
             });
         }
-
-        // 核心功能：浏览器免责发声 (Web Speech API) 和视觉标签反馈
         function speak(text, element) {
-            // 1. 让浏览器念单词 (纯正美音)
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'en-US'; utterance.rate = 0.85; utterance.pitch = 1.1;
             window.speechSynthesis.speak(utterance);
-
-            // 2. 视觉反馈魔法：让红色音标标签弹出来
             const label = element.querySelector('.word-label');
-            label.classList.add('show'); // 加上 'show' 状态，带弹簧动画弹出
-            
-            // 2 秒后自动消失
+            label.classList.add('show');
             setTimeout(() => { label.classList.remove('show'); }, 2000);
         }
-
-        // 👑 智能大脑初始化：远程请求 JSON 数据仓库
         window.onload = function() {
-            // 💡 远程请求你在仓库根目录下的 scenes.json 数据
             fetch('scenes.json')
                 .then(response => {
-                    if (!response.ok) throw new Error("无法读取场景数据文件 (scenes.json)，机器人还没跑完。");
-                    return response.json(); // 翻译成 JSON 对象
+                    if (!response.ok) throw new Error("无法读取场景数据文件 (scenes.json)");
+                    return response.json();
                 }) 
                 .then(data => {
-                    appData = data; // 存入本地变量
-
-                    // 1. 👑 智能生成顶部菜单：JSON 里有几个场景数据，就自动生成几个按钮
+                    appData = data;
                     const navMenu = document.getElementById('nav-menu');
                     Object.values(appData.scenes).forEach(s => {
                         const btn = document.createElement('button');
                         btn.className = 'scene-btn';
-                        btn.innerText = s.title; // 设置按钮标题
-                        btn.onclick = () => loadScene(s.id); // 绑定点击事件
+                        btn.innerText = s.title;
+                        btn.onclick = () => loadScene(s.id);
                         navMenu.appendChild(btn);
                     });
-
-                    // 2. 加载默认激活的场景 (通常是最新的那个)
                     loadScene(appData.activeScene);
                 })
                 .catch(error => {
                     console.error("💡 AIGC初始化出错:", error);
-                    document.getElementById('instruction').innerHTML = "⚠️ 数据未就绪。请确认在 `images/` 下传了图，且 GitHub Actions 机器人已经成功跑完绿勾 ✅。";
+                    document.getElementById('instruction').innerHTML = "⚠️ 数据未就绪。请确认在 `images/` 下传了图且 GitHub Actions 绿勾✅。";
                 });
         }
     </script>
