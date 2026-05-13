@@ -2,22 +2,30 @@ import os
 import json
 from ultralytics import YOLO 
 
-# 💡 扩充并优化了音标数据库（全小写匹配，防止大小写导致找不到音标）
+# 👑 完整版 COCO 数据集 80 类物体标准美语音标库
 PHONETIC_DB = {
-    "apple": "[ˈæpl]",
-    "tree": "[triː]",
-    "house": "[haʊs]",
-    "sunflower": "[ˈsʌnflaʊər]",
-    "dog": "[dɔːɡ]",
-    "cat": "[kæt]",
-    "desk": "[desk]",
-    "blackboard": "[ˈblækbɔːrd]",
-    "chair": "[tʃer]",
-    "book": "[bʊk]",
-    "bowl": "[boʊl]", 
-    "table": "[ˈteɪbl]",
-    "potted plant": "[ˈpɑːtɪd plænt]",
-    "person": "[ˈpɜːrsn]"
+    "person": "[ˈpɜːrsn]", "bicycle": "[ˈbaɪsɪkl]", "car": "[kɑːr]", "motorcycle": "[ˈmoʊtərsaɪkl]",
+    "airplane": "[ˈerpleɪn]", "bus": "[bʌs]", "train": "[treɪn]", "truck": "[trʌk]", "boat": "[boʊt]",
+    "traffic light": "[ˈtræfɪk laɪt]", "fire hydrant": "[ˈfaɪər ˈhaɪdrənt]", "stop sign": "[stɑːp saɪn]",
+    "parking meter": "[ˈpɑːrkɪŋ ˈmiːtər]", "bench": "[bentʃ]", "bird": "[bɜːrd]", "cat": "[kæt]",
+    "dog": "[dɔːɡ]", "horse": "[hɔːrs]", "sheep": "[ʃiːp]", "cow": "[kaʊ]", "elephant": "[ˈelɪfənt]",
+    "bear": "[ber]", "zebra": "[ˈziːbrə]", "giraffe": "[dʒəˈræf]", "backpack": "[ˈbækpæk]",
+    "umbrella": "[ʌmˈbrelə]", "handbag": "[ˈhændbæɡ]", "tie": "[taɪ]", "suitcase": "[ˈsuːtkeɪs]",
+    "frisbee": "[ˈfrɪzbi]", "skis": "[skiːz]", "snowboard": "[ˈsnoʊbɔːrd]", "sports ball": "[spɔːrts bɔːl]",
+    "kite": "[kaɪt]", "baseball bat": "[ˈbeɪsbɔːl bæt]", "baseball glove": "[ˈbeɪsbɔːl ɡlʌv]",
+    "skateboard": "[ˈskeɪtbɔːrd]", "surfboard": "[ˈsɜːrfbɔːrd]", "tennis racket": "[ˈtenɪs ˈrækɪt]",
+    "bottle": "[ˈbɑːtl]", "wine glass": "[waɪn ɡlæs]", "cup": "[kʌp]", "fork": "[fɔːrk]", "knife": "[naɪf]",
+    "spoon": "[spuːn]", "bowl": "[boʊl]", "banana": "[bəˈnænə]", "apple": "[ˈæpl]", "sandwich": "[ˈsændwɪtʃ]",
+    "orange": "[ˈɔːrɪndʒ]", "broccoli": "[ˈbrɑːkəli]", "carrot": "[ˈkærət]", "hot dog": "[hɑːt dɔːɡ]",
+    "pizza": "[ˈpiːtsə]", "donut": "[ˈdoʊnʌt]", "cake": "[keɪk]", "chair": "[tʃer]", "couch": "[kaʊtʃ]",
+    "potted plant": "[ˈpɑːtɪd plænt]", "bed": "[bed]", "dining table": "[ˈdaɪnɪŋ ˈteɪbl]",
+    "toilet": "[ˈtɔɪlət]", "tv": "[tiː ˈviː]", "laptop": "[ˈlæptɑːp]", "mouse": "[maʊs]",
+    "remote": "[rɪˈmoʊt]", "keyboard": "[ˈkiːbɔːrd]", "cell phone": "[sel foʊn]", "microwave": "[ˈmaɪkrəweɪv]",
+    "oven": "[ˈʌvn]", "toaster": "[ˈtoʊstər]", "sink": "[sɪŋk]", "refrigerator": "[rɪˈfrɪdʒəreɪtər]",
+    "book": "[bʊk]", "clock": "[klɑːk]", "vase": "[veɪs]", "scissors": "[ˈsɪzərz]",
+    "teddy bear": "[ˈtedi ber]", "hair drier": "[her ˈdraɪər]", "toothbrush": "[ˈtuːθbrʌʃ]",
+    # 额外补充一些变体
+    "table": "[ˈteɪbl]", "desk": "[desk]", "monitor": "[ˈmɑːnɪtər]"
 }
 
 def get_phonetic(word):
