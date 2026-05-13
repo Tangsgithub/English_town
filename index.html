@@ -2,83 +2,206 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>史蒂夫体素英语学院 - 0成本AIGC自动教学平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Steve Voxel English Academy</title>
     <style>
-        body { margin: 0; display: flex; flex-direction: column; align-items: center; background-color: #f8fafc; font-family: 'Comic Sans MS', 'PingFang SC', sans-serif; padding-bottom: 50px;}
-        .nav-menu { margin-top: 20px; display: flex; gap: 15px; background: white; padding: 10px 20px; border-radius: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .scene-btn { background: transparent; border: 2px solid transparent; padding: 10px 20px; font-size: 18px; font-weight: bold; color: #64748b; border-radius: 20px; cursor: pointer; transition: all 0.3s; }
-        .scene-btn.active { background: #e0f2fe; color: #0284c7; border: 2px solid #38bdf8; }
-        .instruction { margin: 15px; color: #0f172a; font-size: 20px; font-weight: bold; text-align: center;}
-        .book-container { position: relative; width: 98vw; max-width: 1400px; border: 12px solid #fff; border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); overflow: hidden; }
-        .page-image { width: 100%; display: block; user-select: none; -webkit-user-drag: none; }
-        .hotspot { position: absolute; cursor: pointer; background-color: transparent; border: none; display: flex; align-items: center; justify-content: center; z-index: 5;}
-        .word-label { white-space: nowrap; background: rgba(255, 255, 255, 0.96); color: #333; padding: 12px 20px; border-radius: 15px; font-size: 24px; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.2); pointer-events: none; opacity: 0; transform: translateY(15px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center; }
-        .word-label.show { opacity: 1; transform: translateY(-10px); }
-        .phonetic { display: block; color: #e11d48; font-size: 16px; margin-top: 4px; font-weight: normal; font-family: sans-serif;}
+        /* 全局现代极简背景 */
+        body { 
+            margin: 0; display: flex; flex-direction: column; align-items: center; 
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            font-family: 'Helvetica Neue', 'PingFang SC', sans-serif; 
+            min-height: 100vh; padding: 20px 0;
+        }
+        
+        /* 玻璃拟态导航栏 */
+        .nav-menu { 
+            display: flex; gap: 12px; background: rgba(255, 255, 255, 0.7); 
+            padding: 12px 25px; border-radius: 40px; 
+            backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
+            flex-wrap: wrap; justify-content: center; z-index: 10;
+        }
+        .scene-btn { 
+            background: #f1f5f9; border: none; padding: 12px 24px; 
+            font-size: 16px; font-weight: 600; color: #475569; 
+            border-radius: 30px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .scene-btn:hover { background: #e2e8f0; transform: translateY(-2px); }
+        .scene-btn.active { 
+            background: #3b82f6; color: white; 
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); 
+        }
+
+        /* 顶部指令文字 */
+        .instruction-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            width: 90vw; max-width: 1200px; margin: 20px 0;
+        }
+        .instruction { color: #334155; font-size: 18px; font-weight: bold; margin: 0;}
+        
+        /* 🐛 魔法开关：调试模式按钮 */
+        .debug-btn {
+            background: #fef08a; color: #854d0e; border: none; padding: 8px 16px;
+            border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: all 0.2s;
+        }
+        .debug-btn:active { transform: scale(0.95); }
+
+        /* 👑 绘本容器：修复点击不准的核心！ */
+        /* 使用 inline-block 让容器死死抱住图片，相对定位让热点比例永远正确 */
+        .book-container { 
+            position: relative; display: inline-block; width: 95vw; max-width: 1200px;
+            border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.12); 
+            overflow: hidden; background-color: #fff; line-height: 0;
+        }
+        .page-image { 
+            width: 100%; height: auto; display: block; 
+            user-select: none; -webkit-user-drag: none; 
+        }
+        
+        /* 隐形热点区域 */
+        .hotspot { 
+            position: absolute; cursor: pointer; display: flex; 
+            align-items: center; justify-content: center; z-index: 5;
+            /* Debug 模式下会通过 JS 动态显示边框 */
+        }
+        
+        /* 🌟 极致美观的玻璃拟态弹出标签 */
+        .word-label { 
+            position: absolute; white-space: nowrap; pointer-events: none;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 12px 24px; border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+            opacity: 0; transform: translateY(20px) scale(0.9); 
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .word-label.show { opacity: 1; transform: translateY(0px) scale(1); }
+        
+        /* 排版：单词、图标和音标 */
+        .word-title { 
+            display: flex; align-items: center; gap: 8px;
+            color: #0f172a; font-size: 26px; font-weight: 800; letter-spacing: 0.5px;
+        }
+        .audio-icon { font-size: 22px; }
+        .phonetic { 
+            color: #ef4444; font-size: 16px; margin-top: 4px; 
+            font-weight: 600; font-family: 'Courier New', Courier, monospace;
+        }
     </style>
 </head>
 <body>
+
     <div id="nav-menu" class="nav-menu"></div>
-    <div id="instruction" class="instruction">🪄 正在请求 AI 扫描的魔法数据...</div>
+
+    <div class="instruction-bar">
+        <div id="instruction" class="instruction">🪄 正在加载魔法场景...</div>
+        <!-- 开发者透视眼镜按钮 -->
+        <button id="debugToggle" class="debug-btn">👁️ 透视热点框 (关)</button>
+    </div>
+
+    <!-- 舞台容器 -->
     <div class="book-container">
-        <img id="page-image" src="" class="page-image" alt="Voxel English Scene">
+        <img id="page-image" src="" class="page-image" alt="Scene">
         <div id="hotspot-container"></div>
     </div>
+
     <script>
-        let appData = null;
+        let appData = null; 
+        let isDebugMode = false; // 控制是否显示热点框
+
         function loadScene(sceneId) {
-            if (!appData || !appData.scenes[sceneId]) {
-                console.error("💡 AIGC数据未就绪。请确认在 images/ 下传了图且机器人跑完 ✅。");
-                return;
-            }
+            if (!appData || !appData.scenes[sceneId]) return;
+
             const sceneData = appData.scenes[sceneId];
-            const allBtns = document.querySelectorAll('.scene-btn');
-            allBtns.forEach(btn => btn.classList.remove('active'));
+
+            // 按钮高亮切换
+            document.querySelectorAll('.scene-btn').forEach(btn => btn.classList.remove('active'));
             const clickedBtn = document.querySelector(`[onclick*="loadScene('${sceneId}')"]`);
             if (clickedBtn) clickedBtn.classList.add('active');
+
+            // 内容更新
             document.getElementById('instruction').innerText = sceneData.instruction;
             document.getElementById('page-image').src = sceneData.imageUrl;
+
+            // 👑 重新渲染热点
             const hotspotContainer = document.getElementById('hotspot-container');
-            hotspotContainer.innerHTML = '';
+            hotspotContainer.innerHTML = ''; 
+
             sceneData.hotspots.forEach(hs => {
                 const hsElement = document.createElement('div');
                 hsElement.className = 'hotspot';
                 hsElement.style.cssText = `top: ${hs.top}%; left: ${hs.left}%; width: ${hs.width}%; height: ${hs.height}%;`;
-                hsElement.innerHTML = `<span class="word-label">${hs.word}<span class="phonetic">${hs.phonetic}</span></span>`;
-                hsElement.onclick = () => speak(hs.word, hsElement);
+                
+                // 开发者透视眼镜逻辑
+                if(isDebugMode) {
+                    hsElement.style.border = "3px dashed #38bdf8";
+                    hsElement.style.backgroundColor = "rgba(56, 189, 248, 0.1)";
+                }
+
+                // 精美的弹出标签结构
+                hsElement.innerHTML = `
+                    <div class="word-label">
+                        <div class="word-title">
+                            <span class="audio-icon">🔊</span>
+                            <span>${hs.word}</span>
+                        </div>
+                        <span class="phonetic">${hs.phonetic}</span>
+                    </div>
+                `;
+
+                hsElement.onclick = (e) => speak(hs.word, hsElement);
                 hotspotContainer.appendChild(hsElement);
             });
         }
+
         function speak(text, element) {
+            // 语音播报
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'en-US'; utterance.rate = 0.85; utterance.pitch = 1.1;
+            utterance.lang = 'en-US'; utterance.rate = 0.85; 
             window.speechSynthesis.speak(utterance);
+
+            // 让所有标签先隐藏，防止重叠显示
+            document.querySelectorAll('.word-label').forEach(lbl => lbl.classList.remove('show'));
+
+            // 弹出当前点击的标签
             const label = element.querySelector('.word-label');
             label.classList.add('show');
-            setTimeout(() => { label.classList.remove('show'); }, 2000);
+            
+            setTimeout(() => { label.classList.remove('show'); }, 2500);
         }
+
+        // 切换调试模式
+        document.getElementById('debugToggle').onclick = function() {
+            isDebugMode = !isDebugMode;
+            this.innerText = isDebugMode ? "👁️ 透视热点框 (开)" : "👁️ 透视热点框 (关)";
+            this.style.background = isDebugMode ? "#4ade80" : "#fef08a";
+            this.style.color = isDebugMode ? "#064e3b" : "#854d0e";
+            // 重新加载当前场景以应用边框样式
+            if(appData && appData.activeScene) {
+                loadScene(appData.activeScene);
+            }
+        };
+
         window.onload = function() {
-            fetch('scenes.json')
-                .then(response => {
-                    if (!response.ok) throw new Error("无法读取场景数据文件 (scenes.json)");
-                    return response.json();
-                }) 
+            // 加上时间戳防止浏览器强缓存 JSON
+            fetch('scenes.json?t=' + new Date().getTime())
+                .then(response => response.json()) 
                 .then(data => {
-                    appData = data;
+                    appData = data; 
                     const navMenu = document.getElementById('nav-menu');
                     Object.values(appData.scenes).forEach(s => {
                         const btn = document.createElement('button');
                         btn.className = 'scene-btn';
-                        btn.innerText = s.title;
-                        btn.onclick = () => loadScene(s.id);
+                        btn.innerText = s.title; 
+                        btn.onclick = () => loadScene(s.id); 
                         navMenu.appendChild(btn);
                     });
                     loadScene(appData.activeScene);
                 })
                 .catch(error => {
-                    console.error("💡 AIGC初始化出错:", error);
-                    document.getElementById('instruction').innerHTML = "⚠️ 数据未就绪。请确认在 `images/` 下传了图且 GitHub Actions 绿勾✅。";
+                    document.getElementById('instruction').innerHTML = "⚠️ 等待 AIGC 数据处理中...";
                 });
         }
     </script>
