@@ -4,108 +4,171 @@
   "scenes": {
     "voxel-classroom": {
       "id": "voxel-classroom",
-      "title": "✨ AIGC智能扫描: voxel-classroom",
+      "title": "🗺️ 场景: voxel-classroom",
       "imageUrl": "images/voxel-classroom.jpg",
-      "instruction": "AIGC智能扫描完成！画面共有 11 个物体，点点看！",
+      "instruction": "✨ 魔法扫描完成！画面中发现了 18 个物体，点点看！",
       "hotspots": [
         {
-          "id": "auto_bench_13_0",
-          "word": "bench",
-          "phonetic": "[音标待更新]",
-          "top": 71.1,
-          "left": 49.66,
-          "width": 15.76,
-          "height": 26.12
+          "id": "auto_Laptop_63_0",
+          "word": "Laptop",
+          "phonetic": "[ˈlæptɑːp]",
+          "top": 56.546,
+          "left": 77.715,
+          "width": 19.672,
+          "height": 20.309
         },
         {
-          "id": "auto_bench_13_1",
-          "word": "bench",
-          "phonetic": "[音标待更新]",
-          "top": 58.08,
-          "left": 67.69,
-          "width": 15.71,
-          "height": 22.08
+          "id": "auto_Clock_74_1",
+          "word": "Clock",
+          "phonetic": "[klɑːk]",
+          "top": 34.139,
+          "left": 48.554,
+          "width": 2.706,
+          "height": 5.284
         },
         {
-          "id": "auto_chair_56_2",
-          "word": "chair",
+          "id": "auto_Chair_56_2",
+          "word": "Chair",
           "phonetic": "[tʃer]",
-          "top": 70.99,
-          "left": 49.52,
-          "width": 15.76,
-          "height": 26.29
+          "top": 66.805,
+          "left": 17.078,
+          "width": 9.466,
+          "height": 24.919
         },
         {
-          "id": "auto_tv_62_3",
-          "word": "tv",
-          "phonetic": "[音标待更新]",
-          "top": 2.6,
-          "left": 25.24,
-          "width": 25.55,
-          "height": 51.27
+          "id": "auto_Potted plant_58_3",
+          "word": "Potted plant",
+          "phonetic": "[ˈpɑːtɪd plænt]",
+          "top": 41.907,
+          "left": 64.186,
+          "width": 7.969,
+          "height": 18.359
         },
         {
-          "id": "auto_bottle_39_4",
-          "word": "bottle",
-          "phonetic": "[音标待更新]",
-          "top": 69.07,
-          "left": 81.72,
-          "width": 2.38,
-          "height": 11.07
+          "id": "auto_Dining table_60_4",
+          "word": "Dining table",
+          "phonetic": "[ˈdaɪnɪŋ ˈteɪbl]",
+          "top": 65.36,
+          "left": 32.477,
+          "width": 14.874,
+          "height": 26.233
         },
         {
-          "id": "auto_bottle_39_5",
-          "word": "bottle",
-          "phonetic": "[音标待更新]",
-          "top": 70.32,
-          "left": 81.46,
-          "width": 1.9,
-          "height": 9.27
+          "id": "auto_Chair_56_5",
+          "word": "Chair",
+          "phonetic": "[tʃer]",
+          "top": 61.369,
+          "left": 56.333,
+          "width": 5.801,
+          "height": 6.092
         },
         {
-          "id": "auto_bench_13_6",
-          "word": "bench",
-          "phonetic": "[音标待更新]",
-          "top": 64.72,
-          "left": 42.95,
-          "width": 17.13,
-          "height": 24.88
+          "id": "auto_Keyboard_66_6",
+          "word": "Keyboard",
+          "phonetic": "[ˈkiːbɔːrd]",
+          "top": 72.081,
+          "left": 81.284,
+          "width": 14.99,
+          "height": 4.55
         },
         {
-          "id": "auto_bottle_39_7",
-          "word": "bottle",
-          "phonetic": "[音标待更新]",
-          "top": 71.47,
-          "left": 79.6,
-          "width": 1.66,
-          "height": 6.51
+          "id": "auto_Chair_56_7",
+          "word": "Chair",
+          "phonetic": "[tʃer]",
+          "top": 89.768,
+          "left": 88.365,
+          "width": 11.635,
+          "height": 10.232
         },
         {
-          "id": "auto_bench_13_8",
-          "word": "bench",
-          "phonetic": "[音标待更新]",
-          "top": 64.51,
-          "left": 43.12,
-          "width": 21.15,
-          "height": 31.58
+          "id": "auto_Chair_56_8",
+          "word": "Chair",
+          "phonetic": "[tʃer]",
+          "top": 54.824,
+          "left": 34.739,
+          "width": 3.831,
+          "height": 12.035
         },
         {
-          "id": "auto_bench_13_9",
-          "word": "bench",
-          "phonetic": "[音标待更新]",
-          "top": 51.24,
-          "left": 61.53,
-          "width": 15.94,
-          "height": 25.47
+          "id": "auto_Chair_56_9",
+          "word": "Chair",
+          "phonetic": "[tʃer]",
+          "top": 66.199,
+          "left": 54.24,
+          "width": 7.898,
+          "height": 25.133
         },
         {
-          "id": "auto_bottle_39_10",
-          "word": "bottle",
-          "phonetic": "[音标待更新]",
-          "top": 68.15,
-          "left": 83.17,
-          "width": 1.64,
-          "height": 10.71
+          "id": "auto_Chair_56_10",
+          "word": "Chair",
+          "phonetic": "[tʃer]",
+          "top": 57.877,
+          "left": 54.764,
+          "width": 4.475,
+          "height": 4.331
+        },
+        {
+          "id": "auto_Chair_56_11",
+          "word": "Chair",
+          "phonetic": "[tʃer]",
+          "top": 61.478,
+          "left": 20.494,
+          "width": 5.98,
+          "height": 5.143
+        },
+        {
+          "id": "auto_Chair_56_12",
+          "word": "Chair",
+          "phonetic": "[tʃer]",
+          "top": 63.916,
+          "left": 37.324,
+          "width": 9.413,
+          "height": 25.749
+        },
+        {
+          "id": "auto_Dining table_60_13",
+          "word": "Dining table",
+          "phonetic": "[ˈdaɪnɪŋ ˈteɪbl]",
+          "top": 64.738,
+          "left": 8.245,
+          "width": 19.085,
+          "height": 27.316
+        },
+        {
+          "id": "auto_Chair_56_14",
+          "word": "Chair",
+          "phonetic": "[tʃer]",
+          "top": 56.85,
+          "left": 53.762,
+          "width": 5.584,
+          "height": 5.231
+        },
+        {
+          "id": "auto_Handbag_26_15",
+          "word": "Handbag",
+          "phonetic": "[ˈhændbæɡ]",
+          "top": 76.949,
+          "left": 22.544,
+          "width": 6.453,
+          "height": 15.216
+        },
+        {
+          "id": "auto_Dining table_60_16",
+          "word": "Dining table",
+          "phonetic": "[ˈdaɪnɪŋ ˈteɪbl]",
+          "top": 65.06,
+          "left": 61.118,
+          "width": 38.716,
+          "height": 34.94
+        },
+        {
+          "id": "auto_Chair_56_17",
+          "word": "Chair",
+          "phonetic": "[tʃer]",
+          "top": 73.847,
+          "left": 37.196,
+          "width": 7.974,
+          "height": 13.915
         }
       ]
     }
